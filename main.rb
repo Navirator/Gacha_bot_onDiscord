@@ -1,17 +1,19 @@
 require 'sqlite3'
 require 'discordrb'
 require 'date'
+require 'dotenv/load'
+require 'byebug'
 
-config = File.foreach('config.txt').map { |line| line.split(' ').join(' ') }
-bot = Discordrb::Commands::CommandBot.new token: "#{config[0].to_s}",
-                                          client_id: "#{config[1].to_s}",
-                                          prefix: "#{config[2].to_s}"
-db = SQLite3::Database.open "Ships_test.db"
+db = SQLite3::Database.open "db/Ships_test.db"
 db.results_as_hash = true
 
 t = Time.now
 i = 1
 f = 1
+
+bot = Discordrb::Commands::CommandBot.new(token: ENV['TOKEN'],
+                                          client_id: ENV['CLIENT_ID'],
+                                          prefix: ENV['PREFIX'])
 bot.command :день_рождения do |mgs|
   while i <= 250
     d = nil
