@@ -4,6 +4,7 @@ require 'date'
 require 'dotenv/load'
 require 'byebug'
 
+
 db = SQLite3::Database.open "db/Ships_test.db"
 db.results_as_hash = true
 
