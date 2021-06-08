@@ -1,3 +1,4 @@
 # RubyMine project files
 .idea
 .env
+.byebug_history
