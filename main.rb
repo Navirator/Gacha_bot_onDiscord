@@ -3,64 +3,63 @@ require 'discordrb'
 require 'date'
 require 'dotenv/load'
 require 'byebug'
+require './metods'
 
-
-db = SQLite3::Database.open "db/Ships_test.db"
+db = SQLite3::Database.open 'db/Ships_test.db'
 db.results_as_hash = true
-
-t = Time.now
-i = 1
-f = 1
 
 bot = Discordrb::Commands::CommandBot.new(token: ENV['TOKEN'],
                                           client_id: ENV['CLIENT_ID'],
                                           prefix: ENV['PREFIX'])
 bot.command :день_рождения do |mgs|
-  while i <= 250
-    d = nil
-    m = nil
+  t = Time.now
+  i = 1
+  check = 1
+  while i <= MyDefs.sizesql(db)
+    day_ship = nil
+    month_ship = nil
 
-    if f == 250
-      mgs.respond "Сегодня нет ни у кого день рождения("
+    day_ship = MyDefs.ship_day(i, db, day_ship)
+
+    month_ship = MyDefs.month_ship(i, db, month_ship)
+
+    name = MyDefs.ship_name(i, db)
+
+    year = MyDefs.year_ship(i, db)
+
+    if check == MyDefs.sizesql(db)
+      mgs.respond 'Сегодня нет ни у кого день рождения('
+      # поиск в разработке
+      j = 1
+      ship = MyDefs.search(j, db)
+      mgs.respond ship
+      #ship[2].each do |row|
+      #  mgs.respond "Ближайший день рождения у #{row['ShipName']}"
+      #end
+      #ship[3].each do |row|
+      #  mgs.respond "#{day}/#{month}/#{row['BirthdayYear']}"
+      #end
     end
 
-    name = db.execute <<-SQL
-       SELECT ShipName FROM Ships WHERE ID==#{i}
-    SQL
-
-    day = db.execute <<-SQL
-       SELECT BirthdayDay FROM Ships WHERE ID==#{i}
-    SQL
-
-    day.each do |row|
-      d = row['BirthdayDay']
-    end
-
-    month = db.execute <<-SQL
-       SELECT BirthdayMonth FROM Ships WHERE ID==#{i}
-    SQL
-
-    month.each do |row|
-      m = row['BirthdayMonth']
-    end
-
-    year = db.execute <<-SQL
-       SELECT BirthdayYear FROM Ships WHERE ID==#{i}
-    SQL
-
-    if d == t.day && m == t.month
+    if day_ship == t.day && month_ship == t.month
       name.each do |row|
         mgs.respond "Сегодня день рождения y #{row['ShipName']}"
       end
 
       year.each do |row|
-        mgs.respond "#{t.day.to_s}/#{t.month.to_s}/#{row['BirthdayYear']}"
+        mgs.respond "#{t.day}/#{t.month}/#{row['BirthdayYear']}"
       end
     else
-      f +=1
+      check += 1
     end
     i += 1
   end
+end
+
+bot.command :спать do |mgs|
+  mgs.respond 'Ложусь спать...'
+  mgs.respond 'Zzzz'
+  bot.stop
 end
 
 at_exit { bot.stop }
