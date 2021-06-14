@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sqlite3'
 require 'discordrb'
 require 'date'
@@ -29,21 +31,19 @@ bot.command :день_рождения do |mgs|
 
     if check == MyDefs.sizesql(db)
       mgs.respond 'Сегодня нет ни у кого день рождения('
-      # поиск в разработке
-      j = 1
-      ship = MyDefs.search(j, db)
-      mgs.respond ship
-      #ship[2].each do |row|
-      #  mgs.respond "Ближайший день рождения у #{row['ShipName']}"
-      #end
-      #ship[3].each do |row|
-      #  mgs.respond "#{day}/#{month}/#{row['BirthdayYear']}"
-      #end
+      ship = MyDefs.search(db)
+      name = MyDefs.ship_name(ship['id'], db)
+      year = MyDefs.year_ship(ship['id'], db)
+      name.each do |row|
+        mgs.respond "Ближайший день рождения у #{row['ShipName']}."
+      end
+      year.each do |row|
+        mgs.respond "#{ship['day']}/#{ship['month']}/#{row['BirthdayYear']}"
+      end
     end
-
     if day_ship == t.day && month_ship == t.month
       name.each do |row|
-        mgs.respond "Сегодня день рождения y #{row['ShipName']}"
+        mgs.respond "Сегодня день рождения y #{row['ShipName']}."
       end
 
       year.each do |row|
