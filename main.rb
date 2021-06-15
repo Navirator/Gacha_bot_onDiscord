@@ -30,7 +30,7 @@ bot.command :день_рождения do |mgs|
     year = MyDefs.year_ship(i, db)
 
     if check == MyDefs.sizesql(db)
-      mgs.respond 'Сегодня нет ни у кого день рождения('
+      mgs.respond 'Сегодня нет ни у кого дня рождения('
       ship = MyDefs.search(db)
       name = MyDefs.ship_name(ship['id'], db)
       year = MyDefs.year_ship(ship['id'], db)
