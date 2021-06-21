@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'sqlite3'
+require 'pg'
 require 'discordrb'
 require 'date'
 require 'dotenv/load'
@@ -8,45 +8,35 @@ require 'byebug'
 
 class MyDefs
   def self.sizesql(db)
-    size = db.execute <<-SQL
-         SELECT COUNT(*) FROM Ships
-    SQL
+    size = db.exec('SELECT * FROM "Ships"')
     size.each do |row|
-      size = row['COUNT(*)']
+      size = row['ID']
     end
-    size
+    size.to_i
   end
 
   def self.ship_name(id, db)
-    db.execute <<-SQL
-         SELECT ShipName FROM Ships WHERE ID==#{id}
-    SQL
+    db.exec('SELECT "ShipName" FROM "Ships" WHERE "ID"='+"#{id}")
   end
 
   def self.ship_day(id, db, day_ship)
-    day = db.execute <<-SQL
-         SELECT BirthdayDay FROM Ships WHERE ID==#{id}
-    SQL
+    day = db.exec('SELECT "BirthdayDay" FROM "Ships" WHERE "ID"='+"#{id}")
     day.each do |row|
       day_ship = row['BirthdayDay']
     end
-    day_ship
+    day_ship.to_i
   end
 
   def self.month_ship(id, db, month_ship)
-    month = db.execute <<-SQL
-         SELECT BirthdayMonth FROM Ships WHERE ID==#{id}
-    SQL
+    month = db.exec('SELECT "BirthdayMonth" FROM "Ships" WHERE "ID"='+"#{id}")
     month.each do |row|
       month_ship = row['BirthdayMonth']
     end
-    month_ship
+    month_ship.to_i
   end
 
   def self.year_ship(id, db)
-    db.execute <<-SQL
-         SELECT BirthdayYear FROM Ships WHERE ID==#{id}
-    SQL
+    db.exec('SELECT "BirthdayYear" FROM "Ships" WHERE "ID"='+"#{id}")
   end
 
   def self.search(db)

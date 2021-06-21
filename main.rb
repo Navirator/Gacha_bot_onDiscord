@@ -1,14 +1,17 @@
 # frozen_string_literal: true
 
-require 'sqlite3'
+require 'pg'
 require 'discordrb'
 require 'date'
 require 'dotenv/load'
 require 'byebug'
 require './metods'
 
-db = SQLite3::Database.open 'db/Ships_test.db'
-db.results_as_hash = true
+db = PG.connect dbname: 'ships',
+                user: ENV['USER'],
+                host: ENV['HOST'],
+                port: ENV['PORT'],
+                password: ENV['PASSWORD']
 
 bot = Discordrb::Commands::CommandBot.new(token: ENV['TOKEN'],
                                           client_id: ENV['CLIENT_ID'],
