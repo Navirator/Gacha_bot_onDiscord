@@ -6,11 +6,12 @@ require 'date'
 require 'dotenv/load'
 require 'byebug'
 require './metods'
+Dotenv.load unless ENV['RAILS_ENV'] == 'production'
 
-db = PG.connect dbname: 'ships',
+db = PG.connect dbname: ENV['DBNAME'],
                 user: ENV['USER'],
                 host: ENV['HOST'],
-                port: ENV['PORT'],
+                port: '5432',
                 password: ENV['PASSWORD']
 
 bot = Discordrb::Commands::CommandBot.new(token: ENV['TOKEN'],
@@ -38,19 +39,19 @@ bot.command :день_рождения do |mgs|
       name = MyDefs.ship_name(ship['id'], db)
       year = MyDefs.year_ship(ship['id'], db)
       name.each do |row|
-        mgs.respond "Ближайший день рождения у #{row['ShipName']}."
+        mgs.respond "Ближайший день рождения у #{row['shipname']}."
       end
       year.each do |row|
-        mgs.respond "#{ship['day']}/#{ship['month']}/#{row['BirthdayYear']}"
+        mgs.respond "#{ship['day']}/#{ship['month']}/#{row['birthdayyear']}"
       end
     end
     if day_ship == t.day && month_ship == t.month
       name.each do |row|
-        mgs.respond "Сегодня день рождения y #{row['ShipName']}."
+        mgs.respond "Сегодня день рождения y #{row['shipname']}."
       end
 
       year.each do |row|
-        mgs.respond "#{t.day}/#{t.month}/#{row['BirthdayYear']}"
+        mgs.respond "#{t.day}/#{t.month}/#{row['birthdayyear']}"
       end
     else
       check += 1
@@ -67,3 +68,4 @@ end
 
 at_exit { bot.stop }
 bot.run
+

@@ -8,35 +8,35 @@ require 'byebug'
 
 class MyDefs
   def self.sizesql(db)
-    size = db.exec('SELECT * FROM "Ships"')
+    size = db.exec('SELECT * FROM "_ships"')
     size.each do |row|
-      size = row['ID']
+      size = row['id']
     end
     size.to_i
   end
 
   def self.ship_name(id, db)
-    db.exec('SELECT "ShipName" FROM "Ships" WHERE "ID"='+"#{id}")
+    db.exec('SELECT "shipname" FROM "_ships" WHERE "id"='+"#{id}")
   end
 
   def self.ship_day(id, db, day_ship)
-    day = db.exec('SELECT "BirthdayDay" FROM "Ships" WHERE "ID"='+"#{id}")
+    day = db.exec('SELECT "birthdayday" FROM "_ships" WHERE "id"='+"#{id}")
     day.each do |row|
-      day_ship = row['BirthdayDay']
+      day_ship = row['birthdayday']
     end
     day_ship.to_i
   end
 
   def self.month_ship(id, db, month_ship)
-    month = db.exec('SELECT "BirthdayMonth" FROM "Ships" WHERE "ID"='+"#{id}")
+    month = db.exec('SELECT "birthdaymonth" FROM "_ships" WHERE "id"='+"#{id}")
     month.each do |row|
-      month_ship = row['BirthdayMonth']
+      month_ship = row['birthdaymonth']
     end
     month_ship.to_i
   end
 
   def self.year_ship(id, db)
-    db.exec('SELECT "BirthdayYear" FROM "Ships" WHERE "ID"='+"#{id}")
+    db.exec('SELECT "birthdayyear" FROM "_ships" WHERE "id"='+"#{id}")
   end
 
   def self.search(db)
